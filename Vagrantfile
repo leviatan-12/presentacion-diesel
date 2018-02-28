@@ -64,8 +64,17 @@ Vagrant.configure("2") do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   apt-get update
-  #   apt-get install -y apache2
-  # SHELL
+   config.vm.provision "shell", inline: <<-SHELL
+      echo deb http://apt.postgresql.org/pub/repos/apt/ xenial-pgdg main > /etc/apt/sources.list.d/pgdg.list
+     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
+        sudo apt-key add -
+     apt-get update
+     apt-get install -y postgresql-10
+     apt-get install -y libpq-dev
+     apt-get install -y gcc
+     apt-get install -y make
+     cd /home/vagrant
+     curl https://sh.rustup.rs/ > rustup.sh
+     sh rustup.sh -y
+   SHELL
 end

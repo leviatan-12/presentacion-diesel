@@ -93,7 +93,12 @@ cd proyecto
 							diesel migration run
 							diesel migration redo
 						</code></pre>
-
+				</section>
+				<section>
+					<h2>Consultas simples</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+esquema.load::&lt;modelo&gt;(&conexion).expect("Error en caso de fallar")
+						</code></pre>
 				</section>
 			</div>
 		</div>
