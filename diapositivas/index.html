@@ -100,6 +100,88 @@ cd proyecto
 esquema.load::&lt;modelo&gt;(&conexion).expect("Error en caso de fallar")
 						</code></pre>
 				</section>
+				<section>
+					<h2>Filtrado de datos</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							Post::belonging_to(user).load(conexion)
+						</code></pre>
+				</section>
+				<section>
+					<h2>Consultas complejas</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+let versions = Version::belonging_to(user)
+  .select(id)
+  .order(num.desc())
+  .limit(5);
+
+let downloads = try!(version_downloads
+  .filter(date.gt(now - 90.days()))
+  .filter(version_id.eq(any(versions)))
+  .order(date)
+  .load::&lt;Download&gt;(conexion));
+						</code></pre>
+				</section>
+				<section>
+					<h2>Modelado de datos</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+#[derive(Queryable)]
+pub struct Download {
+    id: i32,
+    version_id: i32,
+    downloads: i32,
+    counted: i32,
+}
+						</code></pre>
+				</section>
+				<section>
+					<h2>Datos insertables</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+#[derive(Insertable)]
+#[table_name="downloads"]
+pub struct NewDownload {
+    version_id: i32,
+    downloads: i32,
+    counted: i32,
+    date: SystemTime,
+}
+						</code></pre>
+				</section>
+				<section>
+					<h2>Inserción de datos</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+let new_downloads = vec![
+    NewDownload { ... },
+    NewDownload { ... },
+];
+
+insert(&new_downloads)
+    .into(downloads::table)
+    .execute(&connection);
+						</code></pre>
+				</section>
+				<section>
+					<h2>Actualización</h2>
+					<p class="fragment">Un objeto</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+post.published = true;
+post.save_changes(&connection);
+						</code></pre>
+					<p class="fragment">Un grupo de objetos</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+		 update(users.filter(email.like("%@a.bc")))
+    .set(banned.eq(true))
+    .execute(&connection)
+						</code></pre>
+					<p class="fragment">Varios campos en un struct</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+		update(Settings::belonging_to(current_user))
+    .set(&settings_form)
+    .execute(&connection)
+						</code></pre>
+				</section>
+				<section>
+					<h2>Demo</h2>
+				</section>
 			</div>
 		</div>
 
