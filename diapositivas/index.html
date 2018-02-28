@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>Diesel</title>
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<img src="img/logo.png" style="width:30%;height:30%"> </section>
+				<section>
+					<h2>Query builder</h2>
+				</section>
+				<section>
+					<h2>¿Existe uno para rust?</h2>
+					<p class="fragment ">Si. Diesel.</p>
+				</section>
+				<section>
+						<h2>Como usarlo</h2>
+				</section>
+				<section>
+						<h2>Primer paso: Instalación</h2>
+				</section>
+				<section>
+						<h2>Creamos un nuevo proyecto</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+cargo new proyecto
+cd proyecto
+						</code></pre>
+				</section>
+				<section>
+					<h2>En Cargo.toml</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							[dependencies]
+							diesel = { version = "1.0.0", features = ["postgres"] }
+							dotenv = "0.9.0"
+						</code></pre>
+				</section>
+				<section>
+					<h2>Instalamos diesel cli</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							cargo install diesel_cli
+						</code></pre>
+
+						<p class="fragment">en caso de quererlo para una base específica</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							cargo install diesel_cli --no-default-features --features "postgres sqlite mysql"
+						</code></pre>
+				</section>
+				<section>
+					<h2>Creamos un archivo .env con el acceso a la base</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+					echo DATABASE_URL=postgres://usuario:password@direccion/base > .env
+						</code></pre>
+						<p class="fragment">Y corremos un comando para crear base en caso de no existir</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							diesel setup //opcional
+						</code></pre>
+				</section>
+				<section>
+					<h2>Migraciones</h2>
+				</section>
+				<section>
+					<h2>Ejecutamos los siguientes comandos de configuración</h2>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							diesel migration generate tabla
+						</code></pre>
+						<p class="fragment">Este último crea dos archivos</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							Creating migrations/fecha_tabla/up.sql
+							Creating migrations/fecha_tabla/down.sql
+						</code></pre>
+						<p class="fragment">Para ejecutar las migraciones</p>
+						<pre class="fragment"><code class="hljs" data-trim contenteditable>
+							diesel migration run
+							diesel migration redo
+						</code></pre>
+
+				</section>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+				]
+			});
+		</script>
+	</body>
+</html>
